@@ -3,7 +3,7 @@ import csv, os, re
 from bs4 import BeautifulSoup as bs
 import requests
 
-link = 'https://www.ptt.cc/bbs/Gossiping/index38648.html'
+link = 'https://www.ptt.cc/bbs/Gossiping/index.html'
 userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 Edg/123.0.0.0'
 cookies = {'over18':'1'}
 header = {'User-Agent':userAgent}
@@ -65,6 +65,8 @@ def getArtInf(link):
         article = soup.find('div', id='main-content')
         t2 = article.text.split('--')
         t2 = ''.join(t2[:-1]) #t2 為文章本體
+        t2 = t2.split('\n')
+        t2 = '\n'.join(t2[1:])
         t3 = getPush(soup) #t3 為推的集合
         return [t1, t2, t3]            
     return False
@@ -85,8 +87,8 @@ def saveData(info):
         writer.writerow(['時間', author[3].text])
         writer.writerow(['分類', author[1].text])
         writer.writerow([''])
-        for i in info[1]:
-            writer.writerow([i])
+
+        writer.writerow([info[1]])            
         writer.writerow([''])       
         for i in info[2]:
             writer.writerow([i[2], i[0], i[1]])
